@@ -1,7 +1,6 @@
-import { StyleSheet } from 'react-native';
 import Colors from './Colors';
 
-export default StyleSheet.create({
+export default {
   container: {
     flex: 1,
     backgroundColor: Colors.tintColor,
@@ -9,25 +8,29 @@ export default StyleSheet.create({
   content: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: Colors.white,
-    paddingHorizontal: 5,
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  column: {
-    flex: 1,
-    flexDirection: 'row',
+    backgroundColor: Colors.lightGray,
+    paddingHorizontal: 20,
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
   },
   center: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  spaceBetween: {
+    justifyContent: 'space-between',
   },
   verticallyAlign: {
     justifyContent: 'center',
   },
   horizontallyAlign: {
     alignItems: 'center',
-  }
-});
+  },
+  title: {
+    fontSize: 18,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: Colors.gray,
+  },
+};

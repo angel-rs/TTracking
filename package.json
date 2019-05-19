@@ -13,7 +13,7 @@
   "dependencies": {
     "@expo/vector-icons": "^10.0.1",
     "expo": "^32.0.0",
-    "galio-framework": "^0.5.1",
+    "native-base": "^2.12.1",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.1",

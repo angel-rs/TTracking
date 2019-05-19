@@ -1,35 +1,64 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Text, Button } from 'galio-framework';
+import { View, Image } from 'react-native';
+import { Button, Text } from 'native-base';
+import { Col, Row } from 'react-native-easy-grid';
 
 import NavBar from '../../components/NavBar';
 import Layouts from '../../constants/Layouts';
+import Logo from '../../../assets/images/icon.png';
 
 import styles from './styles';
 
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.navigation = props.navigation;
+  }
+
+  logIn = () => {
+    this.navigation.navigate('App');
   }
 
   render() {
     return (
       <View style={Layouts.container}>
-        <NavBar title="Iniciar sesión" rightIcon="apps" />
+        <NavBar title="Iniciar sesión" />
 
-        <View style={Layouts.content}>
-          <Button>
-            Continuar con Facebook
-          </Button>
+        <Col style={styles.content}>
 
-          <Button>
-            Continuar con Twitter
-          </Button>
+          <Col style={Layouts.center} size={50}>
+            <Image style={styles.logo} source={Logo} />
 
-          <Button>
-            Continuar con Google
-          </Button>
-        </View>
+            <Text>
+              TTracking
+            </Text>
+            <Text>
+              Just in time
+            </Text>
+          </Col>
+
+          <Row size={20} />
+
+          <Col style={styles.buttonsSection} size={30}>
+            <Button rounded full onPress={this.logIn}>
+              <Text>
+                Continuar con Facebook
+              </Text>
+            </Button>
+
+            <Button rounded full onPress={this.logIn}>
+              <Text>
+                Continuar con Twitter
+              </Text>
+            </Button>
+
+            <Button rounded full onPress={this.logIn}>
+              <Text>
+                Continuar con Google
+              </Text>
+            </Button>
+          </Col>
+        </Col>
       </View>
     );
   }

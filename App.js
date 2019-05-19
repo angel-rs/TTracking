@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon, Constants } from 'expo';
+import { Platform, StatusBar, View } from 'react-native';
+import { Container, StyleProvider } from 'native-base';
+import { AppLoading, Asset, Font, Constants } from 'expo';
+import getTheme from './src/theme/components';
+import { Ionicons } from '@expo/vector-icons';
 
 import Colors from './src/constants/Colors';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -19,11 +22,10 @@ class App extends Component {
         // Array of require('img')
       ]),
       Font.loadAsync({
-        // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
+        'Roboto': require('native-base/Fonts/Roboto.ttf'),
+        'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        ...Ionicons.font,
       }),
     ]);
   };
@@ -54,19 +56,24 @@ class App extends Component {
 
     return (
       <View style={styles.container}>
-        <StatusBar translucent barStyle="light-content" />
-        <AppNavigator />
+        <StatusBar translucent backgroundColor="#63C6F7" barStyle="light-content" />
+
+        <StyleProvider style={getTheme()}>
+          <Container>
+            <AppNavigator />
+          </Container>
+        </StyleProvider>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     backgroundColor: Colors.tintColor,
     paddingTop:  Constants.statusBarHeight,
-  },
-});
+  }
+};
 
 export default App;

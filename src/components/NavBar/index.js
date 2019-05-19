@@ -1,35 +1,59 @@
-import React, { PureComponent } from 'react';
-import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Text, Icon } from 'galio-framework';
-import { View } from 'react-native';
+import React, { Component } from 'react';
+import { withNavigation } from 'react-navigation';
+import {
+  Header,
+  Left,
+  Right,
+  Button,
+  Body,
+  Text,
+  Title,
+  Icon,
+} from 'native-base';
 
-import Layouts from '../../constants/Layouts';
-import Colors from '../../constants/Colors';
+class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    this.navigation = props.navigation;
+  }
 
-import styles from './styles';
-
-class NavBar extends PureComponent {
   render() {
     const {
-      title,
-      rightIcon,
+      goBack,
+      menu,
+      title
     } = this.props;
 
     return (
-      <View style={styles.nav}>
-        <Row>
-          <Col size={75} style={Layouts.verticallyAlign}>
-            <Text h5 style={styles.title}>
-              { title }
-            </Text>
-          </Col>
+      <Header noShadow>
+        <Left>
+          {
+            goBack && (
+              <Button transparent onClick={this.navigation.goBack}>
+                <Icon name='arrow-back' />
+              </Button>
+            )
+          }
+        </Left>
 
-          <Col size={25} style={Layouts.center}>
-          </Col>
-        </Row>
-      </View>
-    )
+        <Body>
+          <Title>
+            { title }
+          </Title>
+        </Body>
+
+        <Right>
+          {
+            menu && (
+              <Button transparent>
+                <Icon name='apps' />
+              </Button>
+            )
+          }
+        </Right>
+      </Header>
+    );
   }
 }
 
-export default NavBar;
+export default withNavigation(NavBar);

@@ -1,12 +1,12 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import MainTabNavigator from './MainTabNavigator';
+import MainNavigator from './MainNavigator';
 import LoginNavigator from './LoginNavigator';
 
 const AppNavigator = createSwitchNavigator({
   Login: LoginNavigator,
-  Main: MainTabNavigator,
+  App: MainNavigator,
 });
 
 export default createAppContainer(AppNavigator);
