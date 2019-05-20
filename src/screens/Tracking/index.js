@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
-import { View, Header, Text, Button } from 'native-base';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, KeyboardAvoidingView, Dimensions, Keyboard } from 'react-native';
 import { Col, Row } from 'react-native-easy-grid';
+import { SQLite } from 'expo';
+import {
+  View,
+  Text,
+  Button,
+  Input,
+  Label,
+  Item,
+  Form,
+  Content,
+  Picker,
+} from 'native-base';
 
 import Layouts from '../../constants/Layouts';
-import Timer, { millisecondsToHuman } from '../../utils/Timer';
+import newTimer, { millisecondsToHuman } from '../../utils/Timer';
 
 import NavBar from '../../components/NavBar';
 import Clock from '../../components/Clock';
 import OverlayButton from '../../components/OverlayButton';
 
 import styles from './styles';
+
+const deviceWidth = Dimensions.get('window').width;
+
+const categories = ['Estudios' , 'Trabajo', 'Ocio'];
 
 class Tracking extends Component {
   constructor(props) {
@@ -19,11 +34,56 @@ class Tracking extends Component {
       tracking: false,
       timer: null,
       elapsed: null,
+      title: '',
+      category: categories[0],
+      categories,
+      _keyboardIsOpen: false,
     };
+    this.db = null;
+  }
+
+  componentWillMount () {
+    this.db = SQLite.openDatabase('TTracking.db');
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+  }
+
+  componentDidMount() {
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        'create table if not exists records (id text, title text, category text, trackedTime int, creationTime text);'
+      );
+    });
+  }
+
+  addRecord = ({ id, title, category, trackedTime, creationTime }) => {
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        `insert into records (id, title, category, trackedTime, creationTime) values (?, ?, ?, ?, ?)`,
+        [id, title || 'Actividad sin nombre', category, trackedTime, creationTime],
+        (success, response) => {
+          console.log(success);
+          console.log(response);
+        },
+        (error, other) => {
+          console.log(error);
+          console.log(other);
+        }
+      );
+    });
   }
 
   componentWillUnmount() {
-    this.stopTracking();
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow = () => {
+    this.setState({ _keyboardIsOpen: true });
+  }
+
+  _keyboardDidHide = () => {
+    this.setState({ _keyboardIsOpen: false });
   }
 
   startTracking = () => {
@@ -32,7 +92,7 @@ class Tracking extends Component {
 
     this.setState({ tracking: true });
 
-    if (!_timer) this.setState({ timer: new Timer({ title, category }) });
+    if (!_timer) this.setState({ timer: newTimer({ title, category }) });
 
     this.interval = setInterval(() => {
       const { timer, tracking } = this.state;
@@ -47,25 +107,81 @@ class Tracking extends Component {
   };
 
   stopTracking = () => {
+    const { timer } = this.state;
     this.setState({ tracking: false });
     clearInterval(this.interval);
+    console.log(timer);
+    alert(`adding: ${timer}`);
+    this.addRecord(timer);
+  }
+
+  onCategoryChange= (category) => {
+    this.setState({ category });
   }
 
   render() {
-    const { tracking, timer } = this.state;
+    const {
+      tracking,
+      timer,
+      category,
+      categories,
+      _keyboardIsOpen
+    } = this.state;
 
     return (
       <View style={Layouts.container}>
         <NavBar goBack menu title="Tracking" />
 
-        <Clock time={timer ? millisecondsToHuman(timer.trackedTime) : '00:00:00' }/>
+        <Clock
+          hide={_keyboardIsOpen}
+          time={timer ? millisecondsToHuman(timer.trackedTime) : '00:00:00' }
+        />
 
-        <Col style={styles.content}>
+        <View style={[styles.content, _keyboardIsOpen && { paddingTop: 25 }]} behavior="padding">
           <OverlayButton
+            hide={_keyboardIsOpen}
             icon={tracking ? 'square' : 'play'}
             onPress={tracking ? this.stopTracking : this.startTracking}
           />
-        </Col>
+
+          <Text style={{ marginBottom: 20 }}>
+            Nueva actividad
+          </Text>
+
+          <Col>
+            <Item floatingLabel>
+              <Label>
+                Actividad
+              </Label>
+              <Input
+                disabled={tracking}
+                onChangeText={(title) => {
+                  this.setState({ title })
+                }}
+              />
+            </Item>
+
+            <Item>
+              <Picker
+                note
+                mode="dropdown"
+                style={{ width: deviceWidth * 0.9, borderWidth: 1, borderColor: 'black' }}
+                selectedValue={category}
+                onValueChange={this.onCategoryChange}
+              >
+                {
+                  categories.map((_category) => (
+                    <Picker.Item
+                      key={_category}
+                      label={_category}
+                      value={_category}
+                    />
+                  ))
+                }
+              </Picker>
+            </Item>
+          </Col>
+        </View>
       </View>
     );
   }

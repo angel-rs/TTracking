@@ -10,9 +10,9 @@ export default {
     width: 55,
     height: 55,
     borderRadius: 27.5,
-    position: 'relative',
-    left: (deviceWidth / 2) - 45,
-    top: '-45%',
+    position: 'absolute',
+    left: (deviceWidth / 2) - 25,
+    top: '-20%',
     elevation: 7,
   },
   play: {

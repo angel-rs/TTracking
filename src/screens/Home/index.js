@@ -15,29 +15,37 @@ class Home extends Component {
   }
 
   goToTracking = () => {
-    this.navigation.navigate('Tracking');
+    this.navigation.push('Tracking');
   }
 
   goToReports = () => {
-    this.navigation.navigate('Reports');
+    this.navigation.push('Reports');
   }
 
   goToHistoric = () => {
-    this.navigation.navigate('Historic');
+    this.navigation.push('Historic');
   }
 
   render() {
     const name = 'Angel';
     const currentTime = (new Date()).getHours();
-    let greeting;
+    let greeting = `Epa ${name}`;
 
-    if (currentTime < 12) greenting = `Buenos días, ${name}!`;
-    else if (currentTime < 18) greeting = `Buenas tardes, ${name}!`;
-    else greeting = `Buenas noches, ${name}!`;
+    if (currentTime < 12) {
+      greenting = `Buenos días, ${name}!`;
+    } else if (currentTime < 18) {
+      greeting = `Buenas tardes, ${name}!`;
+    } else {
+      greeting = `Buenas noches, ${name}!`;
+    }
 
     return (
       <View style={Layouts.container}>
-        <NavBar menu title="TTracking" />
+        <NavBar
+          menu
+          title="TTracking"
+          options={["Cerrar sesión", "Volver"]}
+        />
 
         <Col style={styles.content}>
           <Text style={{ fontSize: 20 }}>
@@ -53,7 +61,7 @@ class Home extends Component {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.9} style={styles.option}>
+          <TouchableOpacity activeOpacity={0.9} style={styles.option} onPress={this.goToReports}>
             <Text style={Layouts.title}>
               Reportes
             </Text>
@@ -62,7 +70,7 @@ class Home extends Component {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.9} style={styles.option}>
+          <TouchableOpacity activeOpacity={0.9} style={styles.option} onPress={this.goToHistoric}>
             <Text style={Layouts.title}>
               Historial
             </Text>

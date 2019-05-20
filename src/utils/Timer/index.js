@@ -27,5 +27,5 @@ export default newTimer = (attrs = {}) => ({
   category: attrs.category || 'Sin categoria',
   id: uuidv4(),
   trackedTime: 0,
-  creationTime: new Date(),
+  creationTime: (new Date()).toJSON(),
 });

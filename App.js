@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, StatusBar, View } from 'react-native';
-import { Container, StyleProvider } from 'native-base';
+import { Container, StyleProvider, Root } from 'native-base';
 import { AppLoading, Asset, Font, Constants } from 'expo';
 import getTheme from './src/theme/components';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,9 +18,6 @@ class App extends Component {
 
   _loadResourcesAsync = async () => {
     return Promise.all([
-      Asset.loadAsync([
-        // Array of require('img')
-      ]),
       Font.loadAsync({
         'Roboto': require('native-base/Fonts/Roboto.ttf'),
         'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
@@ -60,7 +57,9 @@ class App extends Component {
 
         <StyleProvider style={getTheme()}>
           <Container>
-            <AppNavigator />
+            <Root>
+              <AppNavigator />
+            </Root>
           </Container>
         </StyleProvider>
       </View>
