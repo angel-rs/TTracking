@@ -5,7 +5,12 @@ import styles from './styles';
 
 class Clock extends Component {
   render() {
-    const { time } = this.props;
+    const {
+      hide,
+      time,
+    } = this.props;
+
+    if (hide) return null;
 
     return (
       <View style={styles.container}>

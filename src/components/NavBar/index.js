@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
+import { TouchableOpacity } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 import {
   Header,
+  View,
   Left,
   Right,
-  Button,
   Body,
   Text,
   Title,
   Icon,
+  ActionSheet,
 } from 'native-base';
+
+import styles from './styles';
 
 class NavBar extends Component {
   constructor(props) {
@@ -17,21 +22,49 @@ class NavBar extends Component {
     this.navigation = props.navigation;
   }
 
+  goBack = () => {
+    this.navigation.goBack();
+  }
+
+  onMenuOptionPress = (index) => {
+    const { options } = this.props;
+    const option = options[index];
+
+    if (option) {
+      if (option.toUpperCase() === 'CERRAR SESIÓN') {
+        this.navigation.navigate('Login');
+        return; // TODO: logout
+      }
+    }
+  }
+
+  showMenu = () => {
+    const { options } = this.props;
+
+    const actionSheet = {
+      options,
+      title: "Menu",
+    };
+
+    ActionSheet.show(actionSheet, this.onMenuOptionPress);
+  }
+
   render() {
     const {
       goBack,
       menu,
-      title
+      title,
+      options,
     } = this.props;
 
     return (
-      <Header noShadow>
-        <Left>
+      <Header noShadow style={styles.header}>
+        <Left style={styles.left}>
           {
             goBack && (
-              <Button transparent onClick={this.navigation.goBack}>
-                <Icon name='arrow-back' />
-              </Button>
+              <TouchableOpacity activeOpacity={0.9} onPress={this.goBack}>
+                <Icon name="arrow-back" style={styles.icon} size={23} />
+              </TouchableOpacity>
             )
           }
         </Left>
@@ -42,12 +75,12 @@ class NavBar extends Component {
           </Title>
         </Body>
 
-        <Right>
+        <Right style={styles.right}>
           {
             menu && (
-              <Button transparent>
-                <Icon name='apps' />
-              </Button>
+              <TouchableOpacity activeOpacity={0.9} onPress={this.showMenu}>
+                <Entypo name="dots-three-vertical" style={styles.icon} size={23} />
+              </TouchableOpacity>
             )
           }
         </Right>
