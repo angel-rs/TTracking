@@ -32,6 +32,7 @@ class Historic extends Component {
         null,
         (_, { rows: records }) => {
           this.setState({ records: records._array });
+          alert(JSON.stringify(records._array));
         }
       );
     });

@@ -38,6 +38,7 @@ class Tracking extends Component {
       category: categories[0],
       categories,
       _keyboardIsOpen: false,
+      _isInputFocused: false,
     };
     this.db = null;
   }
@@ -61,13 +62,11 @@ class Tracking extends Component {
       tx.executeSql(
         `insert into records (id, title, category, trackedTime, creationTime) values (?, ?, ?, ?, ?)`,
         [id, title || 'Actividad sin nombre', category, trackedTime, creationTime],
-        (success, response) => {
-          console.log(success);
-          console.log(response);
-        },
+        (success, response) => {},
         (error, other) => {
-          console.log(error);
-          console.log(other);
+          if (error) {
+            alert(`Ocurrió un error ${JSON.stringify(error)}`);
+          }
         }
       );
     });
@@ -110,8 +109,6 @@ class Tracking extends Component {
     const { timer } = this.state;
     this.setState({ tracking: false });
     clearInterval(this.interval);
-    console.log(timer);
-    alert(`adding: ${timer}`);
     this.addRecord(timer);
   }
 
@@ -125,7 +122,8 @@ class Tracking extends Component {
       timer,
       category,
       categories,
-      _keyboardIsOpen
+      _keyboardIsOpen,
+      _isInputFocused,
     } = this.state;
 
     return (
@@ -135,37 +133,71 @@ class Tracking extends Component {
         <Clock
           hide={_keyboardIsOpen}
           time={timer ? millisecondsToHuman(timer.trackedTime) : '00:00:00' }
+          style={{
+            marginTop: _keyboardIsOpen ? 0 : 60,
+            marginBottom: _keyboardIsOpen ? 0 : 70,
+          }}
         />
 
-        <View style={[styles.content, _keyboardIsOpen && { paddingTop: 25 }]} behavior="padding">
+        <View
+          style={[
+            styles.content,
+            _keyboardIsOpen && { paddingTop: 25 }
+          ]}
+          behavior="padding"
+        >
           <OverlayButton
             hide={_keyboardIsOpen}
             icon={tracking ? 'square' : 'play'}
             onPress={tracking ? this.stopTracking : this.startTracking}
           />
 
-          <Text style={{ marginBottom: 20 }}>
+          <Text style={{ marginBottom: 20, color: '#2a2a2a' }}>
             Nueva actividad
           </Text>
 
           <Col>
             <Item floatingLabel>
-              <Label>
+              <Label
+                style={{
+                  color: 'gray',
+                  paddingLeft: _isInputFocused ? 0 : 10,
+                  marginBottom: _isInputFocused ? 0 : 20,
+                }}
+              >
                 Actividad
               </Label>
               <Input
                 disabled={tracking}
+                style={{ color: '#2a2a2a', marginLeft: 5 }}
+                onFocus={() => {
+                  this.setState({ _isInputFocused: true });
+                }}
+                onBlur={() => {
+                  this.setState({ _isInputFocused: false });
+                }}
                 onChangeText={(title) => {
                   this.setState({ title })
                 }}
               />
             </Item>
 
-            <Item>
+            <Item style={{ marginTop: 30 }}>
+              <Text
+                style={{
+                  color: 'gray',
+                  fontSize: 14,
+                  position: 'absolute',
+                  top: '-25%',
+                }}
+              >
+                Categoria
+              </Text>
+
               <Picker
                 note
-                mode="dropdown"
-                style={{ width: deviceWidth * 0.9, borderWidth: 1, borderColor: 'black' }}
+                mode="dialog"
+                style={{ width: deviceWidth * 0.9, borderWidth: 1, borderColor: 'black', color: '#2a2a2a' }}
                 selectedValue={category}
                 onValueChange={this.onCategoryChange}
               >
@@ -175,6 +207,7 @@ class Tracking extends Component {
                       key={_category}
                       label={_category}
                       value={_category}
+                      style={{ color: 'gray' }}
                     />
                   ))
                 }
