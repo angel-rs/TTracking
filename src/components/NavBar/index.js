@@ -23,6 +23,18 @@ class NavBar extends Component {
   }
 
   goBack = () => {
+    const { goBackBefore } = this.props;
+
+    if (goBackBefore) {
+      const shouldGoBack = goBackBefore();
+
+      if (shouldGoBack) {
+        this.navigation.goBack();
+      }
+
+      return;
+    }
+
     this.navigation.goBack();
   }
 
@@ -58,11 +70,11 @@ class NavBar extends Component {
     } = this.props;
 
     return (
-      <Header noShadow style={styles.header}>
+      <Header noLeft={!goBack} noShadow style={styles.header}>
         <Left style={styles.left}>
           {
             goBack && (
-              <TouchableOpacity activeOpacity={0.9} onPress={this.goBack}>
+              <TouchableOpacity activeOpacity={0.9} style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }} onPress={this.goBack}>
                 <Icon name="arrow-back" style={styles.icon} size={23} />
               </TouchableOpacity>
             )
@@ -78,7 +90,7 @@ class NavBar extends Component {
         <Right style={styles.right}>
           {
             menu && (
-              <TouchableOpacity activeOpacity={0.9} onPress={this.showMenu}>
+              <TouchableOpacity activeOpacity={0.9} style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }} onPress={this.showMenu}>
                 <Entypo name="dots-three-vertical" style={styles.icon} size={23} />
               </TouchableOpacity>
             )

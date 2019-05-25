@@ -10,8 +10,8 @@ export default {
     borderWidth: 2,
     borderColor: Colors.white,
     alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 45,
+    marginTop: 60,
+    marginBottom: 70,
   },
   time: {
     fontSize: 26,
