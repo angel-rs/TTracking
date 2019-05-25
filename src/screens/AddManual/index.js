@@ -19,11 +19,6 @@ class AddManual extends Component {
 
   componentWillMount() {
     this.db = SQLite.openDatabase('TTracking.db');
-    this.db.transaction((tx) => {
-      tx.executeSql(
-        'create table if not exists records (id text, title text, category text, trackedTime int, creationTime text);'
-      );
-    });
   }
 
   render() {

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Col, Row } from 'react-native-easy-grid';
 import { withNavigation } from 'react-navigation';
-import { SQLite, DangerZone} from 'expo';
+import { SQLite, DangerZone } from 'expo';
 import {
   AppState,
   BackHandler,
@@ -35,7 +35,7 @@ const {
   width: deviceWidth,
   height: deviceHeight
 } = Dimensions.get('window');
-const categories = ['Estudios' , 'Trabajo', 'Ocio'];
+const categories = ['Trabajo', 'Estudios', 'Transporte', 'Ocio', 'Otro'];
 const TIME_INTERVAL = 1000;
 
 class Tracking extends Component {
@@ -70,9 +70,6 @@ class Tracking extends Component {
 
   componentDidMount() {
     this.db.transaction((tx) => {
-      tx.executeSql(
-        'create table if not exists records (id text, title text, category text, trackedTime int, creationTime text);'
-      );
       tx.executeSql(
         'select * from records;',
         [],
@@ -156,19 +153,15 @@ class Tracking extends Component {
 
     this.db.transaction((tx) => {
       tx.executeSql(
-        `insert into records (id, title, category, trackedTime, creationTime) values (?, ?, ?, ?, ?)`,
-        [id, title || 'Actividad sin nombre', category, trackedTime, creationTime],
+        `insert into records (id, title, category, trackedTime, creationTime, finishTime) values (?, ?, ?, ?, ?, ?)`,
+        [id, title || 'Actividad sin nombre', category, trackedTime, creationTime, (new Date()).toJSON()],
         (success, response) => {},
-        (error, other) => {
-          if (error) {
-            alert(`Ocurrió un error ${JSON.stringify(error)}`);
-          }
-        }
+        (error, other) => {}
       );
     });
 
     if (_isFirstActivity) {
-      this.setState({ _showCongratsModal: true });
+      this.setState({ _showCongratsModal: true, _isFirstActivity: false });
     }
   }
 
@@ -198,6 +191,7 @@ class Tracking extends Component {
 
     if (saveRecord) {
       this.addRecord(timer);
+      this.setState({ timer: null });
     }
   }
 
@@ -229,7 +223,7 @@ class Tracking extends Component {
                 return false;
               }
 
-              return false;
+              return true;
             }}
             menu
             title="Tracking"

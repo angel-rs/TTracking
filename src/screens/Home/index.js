@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Header, Text, Button } from 'native-base';
 import { Image, TouchableOpacity } from 'react-native';
 import { Col, Row } from 'react-native-easy-grid';
+import { SQLite } from 'expo';
 
 import Layouts from '../../constants/Layouts';
 import NavBar from '../../components/NavBar';
@@ -11,7 +12,17 @@ import styles from './styles';
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.db = null;
     this.navigation = props.navigation;
+  }
+
+  componentWillMount() {
+    this.db = SQLite.openDatabase('TTracking.db');
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        'create table if not exists records (id text, title text, category text, trackedTime int, creationTime text, finishTime text);'
+      );
+    });
   }
 
   goToTracking = () => {

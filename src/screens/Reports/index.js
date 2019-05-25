@@ -32,11 +32,7 @@ class Reports extends Component {
   }
 
   componentDidMount() {
-    console.log(1);
     this.db.transaction((tx) => {
-      tx.executeSql(
-        'create table if not exists records (id text, title text, category text, trackedTime int, creationTime text);'
-      );
       tx.executeSql(
         'select * from records;',
         [],
