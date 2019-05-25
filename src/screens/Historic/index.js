@@ -175,6 +175,7 @@ class Historic extends Component {
                           height: 40,
                           paddingVertical: 3,
                           paddingHorizontal: 5,
+                          marginHorizontal: 10,
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           marginBottom: 5,
@@ -209,7 +210,7 @@ class Historic extends Component {
                     );
                   }}
                   renderSectionHeader={({ section: { title } }) => (
-                    <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 12 }}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 12, marginLeft: 30, marginTop: 5 }}>
                       { title }
                     </Text>
                   )}
