@@ -2,7 +2,7 @@ export default {
   icon: {
     color: 'white',
     paddingHorizontal: 10,
-    padddingVertical: 10,
+    paddingVertical: 10,
   },
   header: {
     paddingTop: 10,
