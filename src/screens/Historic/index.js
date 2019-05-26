@@ -152,20 +152,13 @@ class Historic extends Component {
         renderItem={({ item, index, section }) => {
           const duration = millisecondsToHuman(item.trackedTime, false);
           const title = `${item.title[0].toUpperCase()}${item.title.substring(1, item.title.length)}`;
-          let color = '#316258';
+          let color;
 
-          if (item.category === 'Trabajo') {
-            color = Colors.categories[0];
-          }
-          if (item.category === 'Estudios') {
-            color = Colors.categories[1];
-          }
-          if (item.category === 'Transporte') {
-            color = Colors.categories[2];
-          }
-          if (item.category === 'Ocio') {
-            color = Colors.categories[3];
-          }
+          if (item.category === 'Trabajo') color = Colors.categories[0];
+          if (item.category === 'Estudios') color = Colors.categories[1];
+          if (item.category === 'Transporte') color = Colors.categories[2];
+          if (item.category === 'Ocio') color = Colors.categories[3];
+          if (item.category === 'Otro') color = Colors.categories[4];
 
           return (
             <View

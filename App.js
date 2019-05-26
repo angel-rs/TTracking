@@ -4,9 +4,19 @@ import { Container, StyleProvider, Root } from 'native-base';
 import { AppLoading, Asset, Font, Constants } from 'expo';
 import getTheme from './src/theme/components';
 import { Ionicons } from '@expo/vector-icons';
+import * as firebase from 'firebase';
 
 import Colors from './src/constants/Colors';
 import AppNavigator from './src/navigation/AppNavigator';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB1s9yviHKFfFbq0FGuL1Oqxf5fT1Li1tk",
+  authDomain: "ttracking-629b3.firebaseapp.com",
+  databaseURL: "https://ttracking-629b3.firebaseio.com",
+  storageBucket: "ttracking-629b3.appspot.com"
+};
+
+firebase.initializeApp(firebaseConfig);
 
 class App extends Component {
   constructor(props) {

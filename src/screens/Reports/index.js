@@ -91,6 +91,7 @@ class Reports extends Component {
     }
 
     const barChartData = [];
+    const barChartColors = [];
     const pieChartData = [];
     const pieChartColors = [];
     const categories = [];
@@ -106,10 +107,7 @@ class Reports extends Component {
       const trackedTime = new Date(_trackedTime);
 
       const id = `${creationTime.getDate()}/${creationTime.getMonth()}/${creationTime.getFullYear()}`;
-
-      const found = barChartData.findIndex((el) => {
-        return el.id === id;
-      });
+      const found = barChartData.findIndex(el => el.category === category);
 
       const current = {
         x: id,
@@ -117,22 +115,37 @@ class Reports extends Component {
       }
 
       if (found !== -1) {
-        // append to that existing section data
-        barChartData[found].data.push(current);
+        // if the day already exists, add it up, else - append it
+        const _found = barChartData[found].data.findIndex(el => el.x === id);
+        if (_found !== -1) {
+          barChartData[found].data[_found].y += current.y;
+        } else {
+          // append to that existing section data
+          barChartData[found].data.push(current);
+        }
       } else {
-        // create the section
+        if (category === 'Trabajo') barChartColors.push(Colors.categories[0]);
+        if (category === 'Estudios') barChartColors.push(Colors.categories[1]);
+        if (category === 'Transporte') barChartColors.push(Colors.categories[2]);
+        if (category === 'Ocio') barChartColors.push(Colors.categories[3]);
+        if (category === 'Otro') barChartColors.push(Colors.categories[4]);
+
+        // append that day to the section
         barChartData.push({
-          id,
+          category,
           data: [current],
         });
       }
     });
+
     console.log(barChartData);
+
     unsanitisedCategories.forEach((_category) => {
       if (!categories.includes(_category)) {
         categories.push(_category);
       }
     });
+
     categories.forEach((category, index) => {
       const incidences = unsanitisedCategories.filter((_category) => _category === category);
       pieChartColors.push(Colors.categories[index] || '#9e3e3e');
@@ -144,6 +157,7 @@ class Reports extends Component {
 
     return (
       <View style={{ flex: 1 }}>
+        {/*
         <View style={{ flex: 0, alignItems: 'flex-end' }}>
           <Picker
             note
@@ -158,13 +172,14 @@ class Reports extends Component {
             <Picker.Item label="Inicios de los tiempos" value="ALL" />
           </Picker>
         </View>
+        */}
 
         <Text style={{ marginTop: 5, marginLeft: 5, fontSize: 15, color: '#282828' }}>
           Actividades por categoria
         </Text>
 
         <View style={{ flex: 0 }}>
-          <VictoryChart height={deviceHeight * 0.33}>
+          <VictoryChart height={deviceHeight * 0.36}>
             <VictoryAxis
               tickFormat={() => ''}
               style={{
@@ -185,22 +200,10 @@ class Reports extends Component {
         </Text>
 
         <View style={{ flex: 0, marginBottom: 10 }}>
-          <VictoryChart height={deviceHeight * 0.36} width={deviceWidth * 0.95}>
-            <VictoryAxis
-              style={{
-                axis: { stroke: "none" },
-                // tickLabels: { color: Colors.lightGray, fontSize: 0 }
-              }}
-            />
-            <VictoryStack animate={{ duration: 1000 }} colorScale={categoryColor}>
-              {
-                barChartData.map(({ id, data }) => (
-                  <VictoryBar
-                    key={id}
-                    data={data}
-                  />
-                ))
-              }
+          <VictoryChart height={deviceHeight * 0.4} width={deviceWidth * 0.95}>
+            <VictoryAxis style={{ axis: { stroke: "none" } }} />
+            <VictoryStack animate={{ duration: 1000 }} colorScale={barChartColors}>
+              { barChartData.map(({ category, data }) => <VictoryBar key={category} data={data} />) }
             </VictoryStack>
           </VictoryChart>
         </View>

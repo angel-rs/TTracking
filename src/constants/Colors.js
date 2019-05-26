@@ -8,9 +8,10 @@ export default {
   green: '#68E188',
   red: '#F76C6D',
   categories: [
-    '#195380',
-    '#A01664',
-    '#85BA19',
-    '#C87E1B',
+    '#2882c8',
+    '#cf1e82',
+    '#9ddd1d',
+    '#eca648',
+    '#da4747',
   ]
 };
