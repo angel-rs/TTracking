@@ -20,8 +20,6 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.1",
     "react-navigation": "^3.0.9",
-    "react-redux": "^7.0.3",
-    "redux-persist": "^5.10.0",
     "victory-native": "^32.0.2"
   },
   "devDependencies": {

@@ -266,15 +266,9 @@ class Tracking extends Component {
                   disabled={tracking}
                   style={{ color: '#2a2a2a', marginLeft: 5 }}
                   selectionColor={Colors.tintColor}
-                  onFocus={() => {
-                    this.setState({ _isInputFocused: true });
-                  }}
-                  onBlur={() => {
-                    this.setState({ _isInputFocused: false });
-                  }}
-                  onChangeText={(title) => {
-                    this.setState({ title })
-                  }}
+                  onFocus={() => { this.setState({ _isInputFocused: true }); }}
+                  onBlur={() => { this.setState({ _isInputFocused: false }); }}
+                  onChangeText={(title) => { this.setState({ title }) }}
                 />
               </Item>
 

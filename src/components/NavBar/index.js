@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, AsyncStorage } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import {
   Header,
@@ -38,14 +38,15 @@ class NavBar extends Component {
     this.navigation.goBack();
   }
 
-  onMenuOptionPress = (index) => {
+  onMenuOptionPress = async (index) => {
     const { options } = this.props;
     const option = options[index];
 
     if (option) {
       if (option.toUpperCase() === 'CERRAR SESIÓN') {
+        await AsyncStorage.setItem('loggedIn', 'FALSE');
         this.navigation.navigate('Login');
-        return; // TODO: logout
+        return;
       }
     }
   }

@@ -3,28 +3,33 @@ import { Button, Text, Input, Item, Label, Toast } from 'native-base';
 import { View, Image, Modal, Dimensions, AsyncStorage } from 'react-native';
 import { Col, Row } from 'react-native-easy-grid';
 import * as firebase from 'firebase';
-import conf from '../../../conf';
+import { DangerZone } from 'expo';
 
 import NavBar from '../../components/NavBar';
-import Loader from '../../components/Loader';
 import Layouts from '../../constants/Layouts';
 import Colors from '../../constants/Colors';
 
 import styles from './styles';
-const emailRegexp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/gi;
+const {
+  width: deviceWidth,
+  height: deviceHeight,
+} = Dimensions.get('window');
 
-class LogIn extends Component {
+const emailRegexp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/gi;
+const { Lottie } = DangerZone;
+
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
-      loggingIn: false,
+      _showModal: false,
     },
     this.navigation = props.navigation;
   }
 
-  logIn = async () => {
+  signUp = async () => {
     const { email, password } = this.state;
 
     if (!email) {
@@ -51,7 +56,7 @@ class LogIn extends Component {
 
     if (password.length < 6) {
       Toast.show({
-        text: 'Contraseña invalida',
+        text: 'La contraseña debe ser de almenos 6 caracacteres',
         buttonText: 'Ok',
         position: "top",
         type: 'warning',
@@ -71,22 +76,15 @@ class LogIn extends Component {
       return;
     }
 
-    this.setState({ loggingIn: true });
-
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      firebase.auth().onAuthStateChanged((user) => {
-        setTimeout(() => {
-          this.setState({ loggingIn: false });
-          AsyncStorage.setItem('loggedIn', 'TRUE');
-          this.navigation.navigate('Home');
-        }, 2000);
-      })
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      this.setState({ _showModal: true });
     } catch (error) {
       console.log(error.toString(error));
-      if (error.toString(error) === 'Error: The password is invalid or the user does not have a password.') {
+
+      if (error.toString(error) === 'Error: The email address is already in use by another account.') {
         Toast.show({
-          text: 'Contraseña invalida',
+          text: 'Ya existe otra cuenta con ese correo',
           buttonText: 'Ok',
           position: "top",
           type: 'danger',
@@ -102,15 +100,15 @@ class LogIn extends Component {
         });
       }
     }
-  };
+  }
 
   render() {
-    const { loggingIn } = this.state;
+    const { _showModal } = this.state;
 
     return (
       <Fragment>
         <View style={Layouts.container}>
-          <NavBar goBack title="Entrar" />
+          <NavBar goBack title="Registro" />
 
           <Col style={styles.content}>
             <Item floatingLabel>
@@ -136,15 +134,20 @@ class LogIn extends Component {
               />
             </Item>
 
-            <Button rounded full onPress={this.logIn}>
+            <Button rounded full onPress={this.signUp}>
               <Text>
-                Iniciar Sesión
+                Registrarme
               </Text>
             </Button>
           </Col>
         </View>
 
-        <Modal transparent={true} animationType="fade" visible={loggingIn} onRequestClose={() => {}}>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={_showModal}
+          onRequestClose={() => { this.setState({ _showModal: false }); }}
+        >
           <View
             style={{
               flex: 1,
@@ -164,7 +167,36 @@ class LogIn extends Component {
                 elevation: 4,
               }}
             >
-              <Loader />
+              <Lottie
+                loop={false}
+                ref={animation => { this.animation = animation; }}
+                onLayout={() => { this.animation.play(); }}
+                style={{ width: 100, height: 100, alignSelf: 'center' }}
+                source={require('../../../assets/animations/check.json')}
+              />
+
+              <Text style={{ textAlign: 'center', color: '#3c332b' }}>
+                <Text style={{ fontWeight: '600' }}>
+                  {'¡Todo listo!\n\n'}
+                </Text>
+                {'Esperamos que disfrutes\nusando '}
+                <Text style={{ color: Colors.tintColor, fontWeight: '800' }}>
+                  TTracking
+                </Text>
+              </Text>
+
+              <Button
+                style={[Layouts.center, { width: deviceWidth * 0.35, marginTop: 15, alignSelf: 'center' }]}
+                onPress={() => {
+                  this.setState({ _showModal: false });
+                  AsyncStorage.setItem('loggedIn', 'TRUE');
+                  this.navigation.navigate('Home');
+                }}
+              >
+                <Text>
+                  Ok!
+                </Text>
+              </Button>
             </View>
           </View>
         </Modal>
@@ -173,4 +205,4 @@ class LogIn extends Component {
   }
 }
 
-export default LogIn;
+export default SignUp;
