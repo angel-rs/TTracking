@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Header, Text, Picker } from 'native-base';
+import { View, Header, Text, Picker, Button } from 'native-base';
 import { Image, TouchableOpacity, Dimensions } from 'react-native';
 import { VictoryPie, VictoryChart, VictoryAxis, VictoryStack, VictoryBar } from "victory-native";
 import { Col, Row } from 'react-native-easy-grid';
@@ -72,11 +72,13 @@ class Reports extends Component {
       return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Lottie
+            ref={animation => { this.animation = animation; }}
+            onLayout={() => { this.animation.play(); }}
             style={{ width: 135, height: 135, alignSelf: 'center' }}
             source={require('../../../assets/animations/sad.json')}
           />
           <Text style={{ textAlign: 'center', fontSize: 16, color: 'dimgray', marginBottom: 10 }}>
-            {`Parece que aún no tienes reportes\nvuelve cuando hayas medido algunas actividades`}
+            {`Parece que aún no tienes reportes,\nvuelve cuando hayas medido algunas actividades`}
           </Text>
 
           <Button transparent style={{ alignSelf: 'center' }} onPress={() => this.navigation.goBack()}>

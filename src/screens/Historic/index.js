@@ -125,14 +125,10 @@ class Historic extends Component {
 
     if (records.length === 0) {
       return (
-        <View style={Layouts.center}>
+        <View style={[Layouts.center, { flex: 1 }]}>
           <Lottie
-            ref={animation => {
-              this.animation = animation;
-            }}
-            onLayout={() => {
-              this.animation.play();
-            }}
+            ref={animation => { this.animation = animation; }}
+            onLayout={() => { this.animation.play(); }}
             style={{ width: 135, height: 135, alignSelf: 'center' }}
             source={require('../../../assets/animations/empty.json')}
           />
