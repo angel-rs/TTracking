@@ -18,6 +18,7 @@ import {
   Label,
   Item,
   Picker,
+  Toast,
 } from 'native-base';
 
 const { Lottie } = DangerZone;
@@ -163,6 +164,14 @@ class Tracking extends Component {
     if (_isFirstActivity) {
       this.setState({ _showCongratsModal: true, _isFirstActivity: false });
     }
+
+    Toast.show({
+      text: 'Guardado con éxito!',
+      buttonText: 'Ok',
+      position: "top",
+      type: 'success',
+      duration: 5000,
+    });
   }
 
   startTracking = () => {
@@ -246,6 +255,7 @@ class Tracking extends Component {
           >
             <OverlayButton
               hide={_keyboardIsOpen}
+              disabled={title.length === 0}
               icon={tracking ? 'square' : 'play'}
               onPress={tracking ? this.stopTracking : this.startTracking}
               style={{ top: '-15%' }}

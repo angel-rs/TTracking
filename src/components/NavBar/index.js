@@ -48,6 +48,11 @@ class NavBar extends Component {
         this.navigation.navigate('Login');
         return;
       }
+
+      if (option.toUpperCase() === 'AGREGAR MANUALMENTE') {
+        this.navigation.navigate('AddManual');
+        return;
+      }
     }
   }
 

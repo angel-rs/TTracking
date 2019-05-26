@@ -47,7 +47,7 @@ class Home extends Component {
         <NavBar
           menu
           title="TTracking"
-          options={["Cerrar sesión", "Volver"]}
+          options={["Agregar Manualmente", "Cerrar sesión",]}
         />
 
         <Col style={[styles.content, { paddingBottom: 15, justifyContent: 'space-between' }]}>
