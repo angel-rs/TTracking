@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, AsyncStorage } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import {
   Header,
@@ -23,17 +23,35 @@ class NavBar extends Component {
   }
 
   goBack = () => {
+    const { goBackBefore } = this.props;
+
+    if (goBackBefore) {
+      const shouldGoBack = goBackBefore();
+
+      if (shouldGoBack) {
+        this.navigation.goBack();
+      }
+
+      return;
+    }
+
     this.navigation.goBack();
   }
 
-  onMenuOptionPress = (index) => {
+  onMenuOptionPress = async (index) => {
     const { options } = this.props;
     const option = options[index];
 
     if (option) {
       if (option.toUpperCase() === 'CERRAR SESIÓN') {
+        await AsyncStorage.setItem('loggedIn', 'FALSE');
         this.navigation.navigate('Login');
-        return; // TODO: logout
+        return;
+      }
+
+      if (option.toUpperCase() === 'AGREGAR MANUALMENTE') {
+        this.navigation.navigate('AddManual');
+        return;
       }
     }
   }
@@ -58,11 +76,11 @@ class NavBar extends Component {
     } = this.props;
 
     return (
-      <Header noShadow style={styles.header}>
+      <Header noLeft={!goBack} noShadow style={styles.header}>
         <Left style={styles.left}>
           {
             goBack && (
-              <TouchableOpacity activeOpacity={0.9} onPress={this.goBack}>
+              <TouchableOpacity activeOpacity={0.9} style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }} onPress={this.goBack}>
                 <Icon name="arrow-back" style={styles.icon} size={23} />
               </TouchableOpacity>
             )
@@ -78,7 +96,7 @@ class NavBar extends Component {
         <Right style={styles.right}>
           {
             menu && (
-              <TouchableOpacity activeOpacity={0.9} onPress={this.showMenu}>
+              <TouchableOpacity activeOpacity={0.9} style={{ flex: 0, justifyContent: 'center', alignItems: 'center' }} onPress={this.showMenu}>
                 <Entypo name="dots-three-vertical" style={styles.icon} size={23} />
               </TouchableOpacity>
             )

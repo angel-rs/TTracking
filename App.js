@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Platform, StatusBar, View } from 'react-native';
 import { Container, StyleProvider, Root } from 'native-base';
 import { AppLoading, Asset, Font, Constants } from 'expo';
 import getTheme from './src/theme/components';
-import { Ionicons } from '@expo/vector-icons';
+import * as firebase from 'firebase';
+import conf from './conf';
 
 import Colors from './src/constants/Colors';
 import AppNavigator from './src/navigation/AppNavigator';
+
+const firebaseConfig = {
+  apiKey: conf.apiKey,
+  authDomain: conf.authDomain,
+  databaseURL: conf.databaseURL,
+  storageBucket: conf.storageBucket,
+};
+
+firebase.initializeApp(firebaseConfig);
 
 class App extends Component {
   constructor(props) {
@@ -23,6 +34,7 @@ class App extends Component {
         'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
         ...Ionicons.font,
+        ...MaterialCommunityIcons.font,
       }),
     ]);
   };

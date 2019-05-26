@@ -7,16 +7,21 @@ export default {
   },
   content: {
     ...Layouts.content,
-    ...Layouts.spaceBetween,
-    paddingTop: 50,
+    // ...Layouts.spaceBetween,
+    paddingTop: 100,
     paddingBottom: 120,
   },
   option: {
     width: '100%',
+    height: 80,
     paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderRadius: 3,
+    paddingLeft: 20,
+    paddingRight: 10,
+    borderRadius: 25,
     backgroundColor: Colors.white,
     elevation: 1,
+    marginBottom: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 };

@@ -8,12 +8,13 @@ class Clock extends Component {
     const {
       hide,
       time,
+      style,
     } = this.props;
 
     if (hide) return null;
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, style]}>
         <Text style={styles.time}>
           { time }
         </Text>

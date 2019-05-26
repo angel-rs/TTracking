@@ -4,16 +4,19 @@ import { Text, Icon } from 'native-base';
 
 import styles from './styles';
 
-const OverlayButton = ({ hide, icon, onPress }) => {
+const OverlayButton = ({ hide, icon, onPress, style, disabled }) => {
   if (hide) return null;
 
   return (
     <TouchableOpacity
-      activeOpacity={0.9}
+      disabled={disabled}
+      activeOpacity={0.94}
       onPress={onPress}
       style={[
         styles.button,
-        icon === 'play' ? styles.play : styles.stop
+        icon === 'play' ? styles.play : styles.stop,
+        disabled ? { backgroundColor: '#cccccc' } : null,
+        style,
       ]}
     >
       <Icon name={icon} style={{ color: 'white' }} />

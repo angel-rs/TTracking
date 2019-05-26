@@ -5,9 +5,17 @@ export default {
   content: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
     backgroundColor: Colors.white,
-    paddingHorizontal: 15,
-    paddingTop: 30,
   },
+  logo: {
+    alignSelf: 'center',
+    height: 99,
+    width: 99,
+  },
+  buttonsSection: {
+    ...Layouts.center,
+    ...Layouts.spaceBetween,
+    marginBottom: 20,
+    marginHorizontal: 15,
+  }
 }

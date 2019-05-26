@@ -12,7 +12,7 @@ export default {
     borderRadius: 27.5,
     position: 'absolute',
     left: (deviceWidth / 2) - 25,
-    top: '-20%',
+    top: '-30%',
     elevation: 7,
   },
   play: {

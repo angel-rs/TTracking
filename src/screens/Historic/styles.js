@@ -8,7 +8,7 @@ export default {
   content: {
     ...Layouts.content,
     ...Layouts.spaceBetween,
-    paddingTop: 50,
-    paddingBottom: 120,
+    paddingTop: 10,
+    paddingHorizontal: 0,
   },
 };
