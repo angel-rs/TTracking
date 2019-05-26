@@ -22,6 +22,7 @@ class Auth extends Component {
 
   componentWillMount = async () => {
     const value = await AsyncStorage.getItem('loggedIn');
+
     if (value !== null) {
       if (value === 'TRUE') {
         this.navigation.navigate('Home');

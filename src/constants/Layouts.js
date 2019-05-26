@@ -27,10 +27,10 @@ export default {
     alignItems: 'center',
   },
   title: {
-    fontSize: 18,
+    fontSize: 17,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.gray,
   },
 };
