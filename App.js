@@ -5,15 +5,16 @@ import { AppLoading, Asset, Font, Constants } from 'expo';
 import getTheme from './src/theme/components';
 import { Ionicons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
+import conf from './conf';
 
 import Colors from './src/constants/Colors';
 import AppNavigator from './src/navigation/AppNavigator';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB1s9yviHKFfFbq0FGuL1Oqxf5fT1Li1tk",
-  authDomain: "ttracking-629b3.firebaseapp.com",
-  databaseURL: "https://ttracking-629b3.firebaseio.com",
-  storageBucket: "ttracking-629b3.appspot.com"
+  apiKey: conf.apiKey,
+  authDomain: conf.authDomain,
+  databaseURL: conf.databaseURL,
+  storageBucket: conf.storageBucket,
 };
 
 firebase.initializeApp(firebaseConfig);
