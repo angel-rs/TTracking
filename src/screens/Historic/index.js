@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, TouchableOpacity, SectionList } from 'react-native';
-import { View, Header, Text, Button } from 'native-base';
+import { View, Header, Text, Button, ActionSheet } from 'native-base';
 import { Col, Row } from 'react-native-easy-grid';
 import { SQLite, DangerZone } from 'expo';
 
@@ -42,14 +42,18 @@ class Historic extends Component {
     super(props);
     this.state = {
       records: [],
+      ready: false,
     };
     this.navigation = props.navigation;
-    this.ready = false;
     this.db = null;
   }
 
   componentWillMount() {
     this.db = SQLite.openDatabase('TTracking.db');
+    this.updateData();
+  }
+
+  updateData = () => {
     this.db.transaction((tx) => {
       tx.executeSql(
         'select * from records;',
@@ -105,17 +109,35 @@ class Historic extends Component {
             }
           });
 
-          this.ready = true;
-          this.setState({ records });
+          this.setState({ records, ready: true });
+        }
+      );
+    });
+  }
+
+  remove = (id) => {
+    console.log(`removing ${id}`);
+
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM records WHERE id='${id}';`,
+        null,
+        (success, other) => {
+          console.log(success);
+          console.log(other);
+        },
+        (error, other) => {
+          console.log(error);
+          console.log(other);
         }
       );
     });
   }
 
   renderContent = () => {
-    const { records } = this.state;
+    const { records, ready } = this.state;
 
-    if (!this.ready) {
+    if (!ready) {
       return (
         <View style={Layouts.center}>
           <Loader />
@@ -161,7 +183,28 @@ class Historic extends Component {
           if (item.category === 'Otro') color = Colors.categories[4];
 
           return (
-            <View
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onLongPress={() => {
+                const options = ['Eliminar', 'Volver'];
+                const actionSheet = {
+                  options,
+                  title: "Opciones",
+                };
+                const actionSheetHandler = (_index) => {
+                  const option = options[_index];
+
+                  if (option) {
+                    if (option === 'Eliminar') {
+                      this.setState({ ready: false });
+                      this.remove(item.id);
+                      this.updateData();
+                    }
+                  }
+                }
+
+                ActionSheet.show(actionSheet, actionSheetHandler);
+              }}
               key={index}
               style={{
                 flex: 1,
@@ -200,7 +243,7 @@ class Historic extends Component {
                   { duration }
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           );
         }}
         renderSectionHeader={({ section: { title } }) => (
@@ -214,6 +257,7 @@ class Historic extends Component {
   }
 
   render() {
+    console.log('render');
     return (
       <View style={Layouts.container}>
         <NavBar goBack title="Historial" />

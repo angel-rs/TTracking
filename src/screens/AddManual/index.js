@@ -158,7 +158,7 @@ class AddManual extends Component {
                 mode="dialog"
                 style={{ width: deviceWidth * 0.9, borderWidth: 1, borderColor: 'black', color: '#2a2a2a' }}
                 selectedValue={category}
-                onValueChange={this.onCategoryChange}
+                onValueChange={(category) => { this.setState({ category }); }}
               >
                 {
                   categories.map((_category) => (

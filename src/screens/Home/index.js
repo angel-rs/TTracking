@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { View, Header, Text, Button } from 'native-base';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Col, Row } from 'react-native-easy-grid';
 import { SQLite, DangerZone } from 'expo';
 
@@ -11,6 +11,10 @@ import NavBar from '../../components/NavBar';
 
 import styles from './styles';
 const { Lottie } = DangerZone;
+const {
+  width: deviceWidth,
+  height: deviceHeight,
+} = Dimensions.get('window');
 
 class Home extends Component {
   constructor(props) {
@@ -53,9 +57,9 @@ class Home extends Component {
         <Col style={[styles.content, { paddingBottom: 15, justifyContent: 'space-between' }]}>
           <View style={{ flex: 0 }}>
             <TouchableOpacity activeOpacity={0.9} style={styles.option} onPress={this.goToTracking}>
-              <MaterialCommunityIcons name="clock-fast" size={36} color={Colors.tintColor} style={{ width: 40, alignSelf: 'center' }} />
+              <MaterialCommunityIcons name="clock-fast" size={36} color={Colors.tintColor} style={{ width: 35, alignSelf: 'center' }} />
 
-              <View style={{ flexDirection: 'column', marginLeft: 15 }}>
+              <View style={{ flex: 1, flexShrink: 1, flexDirection: 'column', marginLeft: 15 }}>
                 <Text style={Layouts.title}>
                   Tracking
                 </Text>
@@ -66,9 +70,9 @@ class Home extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity activeOpacity={0.9} style={styles.option} onPress={this.goToReports}>
-              <Ionicons name="md-clipboard" size={36} color={Colors.tintColor} style={{ width: 40, paddingLeft: 5 }} />
+              <Ionicons name="md-clipboard" size={36} color={Colors.tintColor} style={{ width: 35, paddingLeft: 5 }} />
 
-              <View style={{ flexDirection: 'column', marginLeft: 15 }}>
+              <View style={{ flex: 1, flexShrink: 1, flexDirection: 'column', marginLeft: 15 }}>
                 <Text style={Layouts.title}>
                   Reportes
                 </Text>
@@ -79,35 +83,35 @@ class Home extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity activeOpacity={0.9} style={styles.option} onPress={this.goToHistoric}>
-              <MaterialCommunityIcons name="history" size={36} color={Colors.tintColor} style={{ width: 40 }} />
+              <MaterialCommunityIcons name="history" size={36} color={Colors.tintColor} style={{ width: 35 }} />
 
-              <View style={{ flexDirection: 'column', marginLeft: 15 }}>
-                <Text style={Layouts.title}>
+              <View style={{ flex: 1, flexShrink: 1, flexDirection: 'column', marginLeft: 15 }}>
+                <Text style={[Layouts.title]}>
                   Historial
                 </Text>
-                <Text style={Layouts.subtitle}>
+                <Text style={[Layouts.subtitle]}>
                   Mide tu rendimiento en actividades pasadas
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
 
-          <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+          <View style={{ flex: 0, height: 40, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
             <Lottie
               ref={animation => { this.animation2 = animation; }}
               onLayout={() => { this.animation2.play(); }}
               speed={0.8}
-              style={{ width: 85, height: 85, alignSelf: 'center', position: 'absolute', left: 138, top: 14, backgroundColor: '#fcfcfc'}}
+              style={{ width: 85, height: 85, position: 'relative', left: -deviceWidth * 0.025, backgroundColor: '#fcfcfc'}}
               source={require('../../../assets/animations/heart.json')}
             />
             <Lottie
               ref={animation => { this.animation = animation; }}
               onLayout={() => { this.animation.play(); }}
-              style={{ width: 100, height: 100, alignSelf: 'center', marginLeft: 190 }}
+              style={{ width: 100, height: 100, position: 'absolute', left: deviceWidth * 0.56, top: -deviceHeight * 0.055 }}
               source={require('../../../assets/animations/coffee.json')}
             />
-            <Text style={{ color: '#634e35', position: 'absolute', top: 47 }}>
-              {'Hecho con          y mucho       '}
+            <Text style={{ color: '#634e35', position: 'absolute' }}>
+              {'Hecho con          y mucho         '}
             </Text>
           </View>
         </Col>

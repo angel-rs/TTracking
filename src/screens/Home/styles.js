@@ -8,12 +8,12 @@ export default {
   content: {
     ...Layouts.content,
     // ...Layouts.spaceBetween,
-    paddingTop: 100,
+    paddingTop: 50,
     paddingBottom: 120,
   },
   option: {
     width: '100%',
-    height: 80,
+    height: 90,
     paddingVertical: 15,
     paddingLeft: 20,
     paddingRight: 10,

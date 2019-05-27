@@ -101,6 +101,8 @@ class LogIn extends Component {
           duration: 5000
         });
       }
+
+      this.setState({ loggingIn: false });
     }
   };
 
