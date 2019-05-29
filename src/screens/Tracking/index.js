@@ -92,15 +92,15 @@ class Tracking extends Component {
     const { timer: _timer } = this.state;
 
     if (_timer) {
-      const latestUpdatedTime = new Date(_timer.creationTime);
+      const creationTime = new Date(_timer.creationTime);
       const now = new Date();
-      const elapsedTime = Math.abs(latestUpdatedTime.getTime() - now.getTime());
+      const elapsedTime = Math.abs(creationTime.getTime() - now.getTime());
 
       console.log(`resumed your shit from ${_timer.trackedTime} to ${_timer.trackedTime + elapsedTime}`);
       this.setState({
         timer: {
           ..._timer,
-          trackedTime: _timer.trackedTime + elapsedTime,
+          trackedTime: elapsedTime,
         }
       });
 
